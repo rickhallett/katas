@@ -44,8 +44,57 @@ const chai = require('chai');
 const assert = chai.assert;
 chai.config.truncateThreshold = 0;
 
-describe('Tests', () => {
-    it('test', () => {
+describe('TDD', () => {
+    it.only('is a function that exports internal functions for unit testing', () => {
+        const dummyMatrix = [
+            [1, 2, 3],
+            [1, 2, 3],
+        ];
+        const expected = validSolution(dummyMatrix, (unitTest = true));
+
+        const internalFunctions = {
+            matrix: dummyMatrix,
+            createRow: expected.createRow,
+            createCol: expected.createCol,
+            createBox: expected.createBox,
+            validateRow: expected.validateRow,
+            validateCol: expected.validateCol,
+            validateBox: expected.validateBox,
+            validateMatrix: expected.validateMatrix,
+        };
+
+        console.log(expected);
+        console.log(internalFunctions);
+
+        assert.deepEqual(expected, internalFunctions);
+    });
+
+    xit('does not mutate the passed in array', () => {
+        const dummyMatrix = [
+            [1, 2, 3],
+            [4, 5, 6],
+        ];
+        const expected = validSolution(dummyMatrix, (unitTest = true));
+        assert.deepEqual(expected, dummyMatrix);
+    });
+
+    it('will throw an internal error on discovering an empty cell and exit futher computation', () => {});
+
+    xit('can create rows', () => {});
+
+    xit('can create columns', () => {});
+
+    xit('can create boxes', () => {});
+
+    xit('can validate a row', () => {});
+
+    xit('can validate a column', () => {});
+
+    xit('can validate a box', () => {});
+});
+
+describe('Codewars Tests', () => {
+    it('validates true suduokus', () => {
         assert.equal(
             validSolution([
                 [5, 3, 4, 6, 7, 8, 9, 1, 2],
@@ -80,6 +129,37 @@ describe('Tests', () => {
 
 // Implementation
 
-function validSolution(sudoku) {}
+function validSolution(sudoku, unitTest) {
+    let matrix = sudoku.slice();
 
-// Alts
+    function createRow() {}
+
+    function createCol() {}
+
+    function createBox() {}
+
+    function validateRow() {}
+
+    function validateCol() {}
+
+    function validateBox() {}
+
+    function validateMatrix() {}
+
+    if (unitTest) {
+        return {
+            matrix,
+            createRow,
+            createCol,
+            createBox,
+            validateRow,
+            validateCol,
+            validateBox,
+            validateMatrix,
+        };
+    }
+
+    return false;
+}
+
+// Alt
