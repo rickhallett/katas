@@ -70,30 +70,36 @@ const falseSudoku = [
 
 describe('TDD', () => {
     it('is a function that exports internal functions for unit testing', () => {
-        const expected = validSolution(trueSudoku, (unitTest = true));
+        const exports = validSolution(trueSudoku, (unitTest = true));
 
         const internalFunctions = {
             matrix: trueSudoku,
-            createRow: expected.createRow,
-            createCol: expected.createCol,
-            createBox: expected.createBox,
-            validateRow: expected.validateRow,
-            validateCol: expected.validateCol,
-            validateBox: expected.validateBox,
-            validateMatrix: expected.validateMatrix,
+            checkForEmptyCells: exports.checkForEmptyCells,
+            createRow: exports.createRow,
+            createCol: exports.createCol,
+            createBox: exports.createBox,
+            validateRow: exports.validateRow,
+            validateCol: exports.validateCol,
+            validateBox: exports.validateBox,
+            validateMatrix: exports.validateMatrix,
         };
 
-        assert.deepEqual(expected, internalFunctions);
+        assert.deepEqual(exports, internalFunctions);
     });
 
     it('does not mutate the passed in array', () => {
-        const expected = validSolution(trueSudoku, (unitTest = true));
+        const exports = validSolution(trueSudoku, (unitTest = true));
 
-        assert.deepEqual(expected.matrix, trueSudoku);
-        assert.notEqual(expected.matrix, trueSudoku);
+        assert.deepEqual(exports.matrix, trueSudoku);
+        assert.notEqual(exports.matrix, trueSudoku);
     });
 
-    it('will throw an internal error on discovering an empty cell and exit futher computation', () => {});
+    it('will throw an internal error on discovering an empty cell and exit futher computation', () => {
+        assert.equal(validSolution(falseSudoku), false);
+        const exports = validSolution(falseSudoku, unitTest = true);
+
+        assert.equal(exports.checkForEmptyCells(falseSudoku), false);
+    });
 
     xit('can create rows', () => {});
 
@@ -147,6 +153,14 @@ describe('Codewars Tests', () => {
 function validSolution(sudoku, unitTest) {
     let matrix = sudoku.slice();
 
+    function checkForEmptyCells(m = matrix) {
+        for (let i = 0; i < m.length; i++) {
+            for (let j = 0; j < m[i].length; j++) {
+                if (m[i][j] === 0) return false;
+            }
+        }
+    }
+
     function createRow() {}
 
     function createCol() {}
@@ -164,6 +178,7 @@ function validSolution(sudoku, unitTest) {
     if (unitTest) {
         return {
             matrix,
+            checkForEmptyCells,
             createRow,
             createCol,
             createBox,
@@ -174,7 +189,11 @@ function validSolution(sudoku, unitTest) {
         };
     }
 
-    return false;
+    if(!checkForEmptyCells()){
+        return false;
+    };
+
+    return true;
 }
 
 // Alt
