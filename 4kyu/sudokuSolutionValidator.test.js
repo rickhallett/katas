@@ -45,7 +45,7 @@ const assert = chai.assert;
 chai.config.truncateThreshold = 0;
 
 describe('TDD', () => {
-    it.only('is a function that exports internal functions for unit testing', () => {
+    it('is a function that exports internal functions for unit testing', () => {
         const dummyMatrix = [
             [1, 2, 3],
             [1, 2, 3],
@@ -63,19 +63,18 @@ describe('TDD', () => {
             validateMatrix: expected.validateMatrix,
         };
 
-        console.log(expected);
-        console.log(internalFunctions);
-
         assert.deepEqual(expected, internalFunctions);
     });
 
-    xit('does not mutate the passed in array', () => {
+    it('does not mutate the passed in array', () => {
         const dummyMatrix = [
             [1, 2, 3],
             [4, 5, 6],
         ];
         const expected = validSolution(dummyMatrix, (unitTest = true));
-        assert.deepEqual(expected, dummyMatrix);
+
+        assert.deepEqual(expected.matrix, dummyMatrix);
+        assert.notEqual(expected.matrix, dummyMatrix);
     });
 
     it('will throw an internal error on discovering an empty cell and exit futher computation', () => {});
