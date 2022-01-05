@@ -75,7 +75,7 @@ describe('TDD', () => {
         const internalFunctions = {
             matrix: trueSudoku,
             checkForEmptyCells: exports.checkForEmptyCells,
-            createRow: exports.createRow,
+            createRows: exports.createRows,
             createCol: exports.createCol,
             createBox: exports.createBox,
             validateRow: exports.validateRow,
@@ -101,9 +101,12 @@ describe('TDD', () => {
         assert.equal(exports.checkForEmptyCells(falseSudoku), false);
     });
 
-    xit('can create rows', () => {});
+    it('can create sorted rows', () => {
+        const exports = validSolution(trueSudoku, unitTest = true);
+        assert.deepEqual(exports.createRows()[0], [1,2,3,4,5,6,7,8,9]);
+    });
 
-    xit('can create columns', () => {});
+    xit('can create sorted columns', () => {});
 
     xit('can create boxes', () => {});
 
@@ -152,6 +155,9 @@ describe('Codewars Tests', () => {
 
 function validSolution(sudoku, unitTest) {
     let matrix = sudoku.slice();
+    let rows = [];
+    let cols = [];
+    let boxes = [];
 
     function checkForEmptyCells(m = matrix) {
         for (let i = 0; i < m.length; i++) {
@@ -161,7 +167,13 @@ function validSolution(sudoku, unitTest) {
         }
     }
 
-    function createRow() {}
+    function createRows(m = matrix) {
+        for (let i = 0; i < m.length; i++) {
+            rows.push(m[i].sort());
+        }
+
+        return rows;
+    }
 
     function createCol() {}
 
@@ -179,7 +191,7 @@ function validSolution(sudoku, unitTest) {
         return {
             matrix,
             checkForEmptyCells,
-            createRow,
+            createRows,
             createCol,
             createBox,
             validateRow,
