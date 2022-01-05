@@ -44,16 +44,36 @@ const chai = require('chai');
 const assert = chai.assert;
 chai.config.truncateThreshold = 0;
 
+const trueSudoku = [
+    [5, 3, 4, 6, 7, 8, 9, 1, 2],
+    [6, 7, 2, 1, 9, 5, 3, 4, 8],
+    [1, 9, 8, 3, 4, 2, 5, 6, 7],
+    [8, 5, 9, 7, 6, 1, 4, 2, 3],
+    [4, 2, 6, 8, 5, 3, 7, 9, 1],
+    [7, 1, 3, 9, 2, 4, 8, 5, 6],
+    [9, 6, 1, 5, 3, 7, 2, 8, 4],
+    [2, 8, 7, 4, 1, 9, 6, 3, 5],
+    [3, 4, 5, 2, 8, 6, 1, 7, 9],
+];
+
+const falseSudoku = [
+    [5, 3, 4, 6, 7, 8, 9, 1, 2],
+    [6, 7, 2, 1, 9, 0, 3, 4, 8],
+    [1, 0, 0, 3, 4, 2, 5, 6, 0],
+    [8, 5, 9, 7, 6, 1, 0, 2, 0],
+    [4, 2, 6, 8, 5, 3, 7, 9, 1],
+    [7, 1, 3, 9, 2, 4, 8, 5, 6],
+    [9, 0, 1, 5, 3, 7, 2, 1, 4],
+    [2, 8, 7, 4, 1, 9, 6, 3, 5],
+    [3, 0, 0, 4, 8, 1, 1, 7, 9],
+];
+
 describe('TDD', () => {
     it('is a function that exports internal functions for unit testing', () => {
-        const dummyMatrix = [
-            [1, 2, 3],
-            [1, 2, 3],
-        ];
-        const expected = validSolution(dummyMatrix, (unitTest = true));
+        const expected = validSolution(trueSudoku, (unitTest = true));
 
         const internalFunctions = {
-            matrix: dummyMatrix,
+            matrix: trueSudoku,
             createRow: expected.createRow,
             createCol: expected.createCol,
             createBox: expected.createBox,
@@ -67,14 +87,10 @@ describe('TDD', () => {
     });
 
     it('does not mutate the passed in array', () => {
-        const dummyMatrix = [
-            [1, 2, 3],
-            [4, 5, 6],
-        ];
-        const expected = validSolution(dummyMatrix, (unitTest = true));
+        const expected = validSolution(trueSudoku, (unitTest = true));
 
-        assert.deepEqual(expected.matrix, dummyMatrix);
-        assert.notEqual(expected.matrix, dummyMatrix);
+        assert.deepEqual(expected.matrix, trueSudoku);
+        assert.notEqual(expected.matrix, trueSudoku);
     });
 
     it('will throw an internal error on discovering an empty cell and exit futher computation', () => {});
@@ -93,7 +109,7 @@ describe('TDD', () => {
 });
 
 describe('Codewars Tests', () => {
-    it('validates true suduokus', () => {
+    xit('validates true suduokus', () => {
         assert.equal(
             validSolution([
                 [5, 3, 4, 6, 7, 8, 9, 1, 2],
