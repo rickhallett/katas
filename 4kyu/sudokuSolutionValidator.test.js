@@ -69,6 +69,35 @@ const falseSudoku = [
 ];
 
 describe('TDD', () => {
+    let trueSudoku;
+    let falseSudoku;
+    
+    beforeEach(() => {
+        trueSudoku = [
+            [5, 3, 4, 6, 7, 8, 9, 1, 2],
+            [6, 7, 2, 1, 9, 5, 3, 4, 8],
+            [1, 9, 8, 3, 4, 2, 5, 6, 7],
+            [8, 5, 9, 7, 6, 1, 4, 2, 3],
+            [4, 2, 6, 8, 5, 3, 7, 9, 1],
+            [7, 1, 3, 9, 2, 4, 8, 5, 6],
+            [9, 6, 1, 5, 3, 7, 2, 8, 4],
+            [2, 8, 7, 4, 1, 9, 6, 3, 5],
+            [3, 4, 5, 2, 8, 6, 1, 7, 9],
+        ];
+
+        falseSudoku = [
+            [5, 3, 4, 6, 7, 8, 9, 1, 2],
+            [6, 7, 2, 1, 9, 0, 3, 4, 8],
+            [1, 0, 0, 3, 4, 2, 5, 6, 0],
+            [8, 5, 9, 7, 6, 1, 0, 2, 0],
+            [4, 2, 6, 8, 5, 3, 7, 9, 1],
+            [7, 1, 3, 9, 2, 4, 8, 5, 6],
+            [9, 0, 1, 5, 3, 7, 2, 1, 4],
+            [2, 8, 7, 4, 1, 9, 6, 3, 5],
+            [3, 0, 0, 4, 8, 1, 1, 7, 9],
+        ];
+    });
+
     it('is a function that exports internal functions for unit testing', () => {
         const exports = validSolution(trueSudoku, (unitTest = true));
 
@@ -76,7 +105,7 @@ describe('TDD', () => {
             matrix: trueSudoku,
             checkForEmptyCells: exports.checkForEmptyCells,
             createRows: exports.createRows,
-            createCol: exports.createCol,
+            createCols: exports.createCols,
             createBox: exports.createBox,
             validateRow: exports.validateRow,
             validateCol: exports.validateCol,
@@ -98,7 +127,7 @@ describe('TDD', () => {
         assert.equal(validSolution(falseSudoku), false);
         const exports = validSolution(falseSudoku, unitTest = true);
 
-        assert.equal(exports.checkForEmptyCells(falseSudoku), false);
+        assert.equal(exports.checkForEmptyCells(falseSudoku.slice()), false);
     });
 
     it('can create sorted rows', () => {
@@ -108,7 +137,16 @@ describe('TDD', () => {
         }
     });
 
-    xit('can create sorted columns', () => {});
+    it('can create sorted columns', () => {
+        const exports = validSolution(trueSudoku, unitTest = true);
+        
+        const cols = exports.createCols(trueSudoku.slice());
+        
+        for (let i = 0; i < 9; i++) {
+            assert.deepEqual(exports.createCols()[i], [1,2,3,4,5,6,7,8,9]);
+        }
+         
+    });
 
     xit('can create boxes', () => {});
 
@@ -177,7 +215,16 @@ function validSolution(sudoku, unitTest) {
         return rows;
     }
 
-    function createCol() {}
+    function createCols(m = matrix) {
+        for (let row = 0; row < m.length; row++) {
+            let tempCol = [];
+            for (let col = 0; col < m[row].length; col++) {
+                tempCol.push(m[col][row]);
+            }
+            cols.push(tempCol.sort());            
+        }
+        return cols;
+    }
 
     function createBox() {}
 
@@ -194,7 +241,7 @@ function validSolution(sudoku, unitTest) {
             matrix,
             checkForEmptyCells,
             createRows,
-            createCol,
+            createCols,
             createBox,
             validateRow,
             validateCol,
