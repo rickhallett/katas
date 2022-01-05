@@ -103,7 +103,9 @@ describe('TDD', () => {
 
     it('can create sorted rows', () => {
         const exports = validSolution(trueSudoku, unitTest = true);
-        assert.deepEqual(exports.createRows()[0], [1,2,3,4,5,6,7,8,9]);
+        for (let i = 0; i < 9; i++) {
+            assert.deepEqual(exports.createRows()[i], [1,2,3,4,5,6,7,8,9]);
+        }
     });
 
     xit('can create sorted columns', () => {});
