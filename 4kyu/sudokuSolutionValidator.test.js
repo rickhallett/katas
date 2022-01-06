@@ -1,5 +1,4 @@
-/**
- * Sudoku Background
+/** Sudoku Background
 Sudoku is a game played on a 9x9 grid. The goal of the game is to fill all cells of the grid 
 with digits from 1 to 9, so that each column, each row, and each of the nine 3x3 sub-grids 
 (also known as blocks) contain all of the digits from 1 to 9.
@@ -44,34 +43,10 @@ const chai = require('chai');
 const assert = chai.assert;
 chai.config.truncateThreshold = 0;
 
-const trueSudoku = [
-    [5, 3, 4, 6, 7, 8, 9, 1, 2],
-    [6, 7, 2, 1, 9, 5, 3, 4, 8],
-    [1, 9, 8, 3, 4, 2, 5, 6, 7],
-    [8, 5, 9, 7, 6, 1, 4, 2, 3],
-    [4, 2, 6, 8, 5, 3, 7, 9, 1],
-    [7, 1, 3, 9, 2, 4, 8, 5, 6],
-    [9, 6, 1, 5, 3, 7, 2, 8, 4],
-    [2, 8, 7, 4, 1, 9, 6, 3, 5],
-    [3, 4, 5, 2, 8, 6, 1, 7, 9],
-];
-
-const falseSudoku = [
-    [5, 3, 4, 6, 7, 8, 9, 1, 2],
-    [6, 7, 2, 1, 9, 0, 3, 4, 8],
-    [1, 0, 0, 3, 4, 2, 5, 6, 0],
-    [8, 5, 9, 7, 6, 1, 0, 2, 0],
-    [4, 2, 6, 8, 5, 3, 7, 9, 1],
-    [7, 1, 3, 9, 2, 4, 8, 5, 6],
-    [9, 0, 1, 5, 3, 7, 2, 1, 4],
-    [2, 8, 7, 4, 1, 9, 6, 3, 5],
-    [3, 0, 0, 4, 8, 1, 1, 7, 9],
-];
-
 describe('TDD', () => {
     let trueSudoku;
     let falseSudoku;
-    
+
     beforeEach(() => {
         trueSudoku = [
             [5, 3, 4, 6, 7, 8, 9, 1, 2],
@@ -106,10 +81,7 @@ describe('TDD', () => {
             checkForEmptyCells: exports.checkForEmptyCells,
             createRows: exports.createRows,
             createCols: exports.createCols,
-            createBox: exports.createBox,
-            validateRow: exports.validateRow,
-            validateCol: exports.validateCol,
-            validateBox: exports.validateBox,
+            createBoxes: exports.createBoxes,
             validateMatrix: exports.validateMatrix,
         };
 
@@ -125,36 +97,40 @@ describe('TDD', () => {
 
     it('will throw an internal error on discovering an empty cell and exit futher computation', () => {
         assert.equal(validSolution(falseSudoku), false);
-        const exports = validSolution(falseSudoku, unitTest = true);
+        const exports = validSolution(falseSudoku, (unitTest = true));
 
         assert.equal(exports.checkForEmptyCells(falseSudoku.slice()), false);
     });
 
-    it('can create sorted rows', () => {
-        const exports = validSolution(trueSudoku, unitTest = true);
+    it('can create and validate sorted rows', () => {
+        const exports = validSolution(trueSudoku, (unitTest = true));
         for (let i = 0; i < 9; i++) {
-            assert.deepEqual(exports.createRows()[i], [1,2,3,4,5,6,7,8,9]);
+            assert.deepEqual(
+                exports.createRows()[i],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9]
+            );
         }
     });
 
-    it('can create sorted columns', () => {
-        const exports = validSolution(trueSudoku, unitTest = true);
-        
+    it('can create and validate sorted columns', () => {
+        const exports = validSolution(trueSudoku, (unitTest = true));
+
         const cols = exports.createCols(trueSudoku.slice());
-        
+
         for (let i = 0; i < 9; i++) {
-            assert.deepEqual(exports.createCols()[i], [1,2,3,4,5,6,7,8,9]);
+            assert.deepEqual(
+                exports.createCols()[i],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9]
+            );
         }
-         
     });
 
-    xit('can create boxes', () => {});
+    it('can create and validate boxes', () => {
+        const exports = validSolution(trueSudoku, unitTest = true);
 
-    xit('can validate a row', () => {});
-
-    xit('can validate a column', () => {});
-
-    xit('can validate a box', () => {});
+        const boxes = exports.createBoxes(trueSudoku);
+        console.log(boxes);
+    });
 });
 
 describe('Codewars Tests', () => {
@@ -216,23 +192,60 @@ function validSolution(sudoku, unitTest) {
     }
 
     function createCols(m = matrix) {
-        for (let row = 0; row < m.length; row++) {
-            let tempCol = [];
-            for (let col = 0; col < m[row].length; col++) {
-                tempCol.push(m[col][row]);
+        for (let col = 0; col < 9; col += 3) {
+            let tempBox = [];
+            for (let box = 0; box < 9; box += 3) {
+                for (let row = 0; row < 3; row++) {
+                    tempBox.push(m[row + box][col]);
+                }
+                boxes.push(tempBox);
             }
-            cols.push(tempCol.sort());            
         }
-        return cols;
+        return boxes;
     }
 
-    function createBox() {}
 
-    function validateRow() {}
+    /**
+     *  col 0 (box 1)
+        row 1, 3 look ahead, forEach push to tempBox
+        row 2, 3 look ahead, ""
+        row 3, 3 look ahead, ""
 
-    function validateCol() {}
+        tempBox push to boxes
+             
+              (box 2)
+        row n, 3 look ahead
+        ...
 
-    function validateBox() {}
+        col 3 (box 4)
+        row 1, 3 look ahead
+        row n, 3 look ahead
+        ...
+
+        col 6 (box 7)
+        row 1, 3 look ahead
+        row n, 3 look ahead
+
+
+
+    */
+    function createBoxes(m = matrix) {
+        // 5 3 4, 6 7 2, 1 9 8
+        for (let box = 0; box < 9; box++) {
+            //console.log('box', box)
+            let tempBox = [];
+            for (let row = 0; row < 3; row++) {
+                //console.log('row', row);
+                for (let col = 0; col < 3; col++) {
+                    //console.log('col', col);
+                    tempBox.push(m[row][col]);        
+                }
+            }
+            boxes.push(tempBox);
+        }
+
+        return boxes;
+    }
 
     function validateMatrix() {}
 
@@ -242,17 +255,14 @@ function validSolution(sudoku, unitTest) {
             checkForEmptyCells,
             createRows,
             createCols,
-            createBox,
-            validateRow,
-            validateCol,
-            validateBox,
+            createBoxes,
             validateMatrix,
         };
     }
 
-    if(!checkForEmptyCells()){
+    if (!checkForEmptyCells()) {
         return false;
-    };
+    }
 
     return true;
 }
