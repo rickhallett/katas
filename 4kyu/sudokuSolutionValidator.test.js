@@ -1,3 +1,9 @@
+/**
+ The commentary command is triggered by \\{motion}, which toggles comment- ing for the specified lines. It’s an operator command, so we can combine it with all of the usual motions. \\ap will toggle commenting for the current paragraph. \\G comments from the current line to the end of the file. \\\ comments the current line.
+
+If you’re curious about how to create your own custom operators, start by reading :h :map-operator   .
+
+
 /** Sudoku Background
 Sudoku is a game played on a 9x9 grid. The goal of the game is to fill all cells of the grid 
 with digits from 1 to 9, so that each column, each row, and each of the nine 3x3 sub-grids 
@@ -115,7 +121,7 @@ describe('TDD', () => {
     it('can create and validate sorted columns', () => {
         const exports = validSolution(trueSudoku, (unitTest = true));
 
-        const cols = exports.createCols(trueSudoku.slice());
+        //const cols = exports.createCols(trueSudoku.slice());
 
         for (let i = 0; i < 9; i++) {
             assert.deepEqual(
@@ -129,7 +135,7 @@ describe('TDD', () => {
         const exports = validSolution(trueSudoku, unitTest = true);
 
         const boxes = exports.createBoxes(trueSudoku);
-        console.log(boxes);
+        //console.log(boxes);
     });
 });
 
@@ -192,15 +198,22 @@ function validSolution(sudoku, unitTest) {
     }
 
     function createCols(m = matrix) {
-        for (let col = 0; col < 9; col += 3) {
+        // for every chunk of 3 columns
+        for (let colChunk = 0; colChunk < 9; colChunk += 3) {
+            console.log('colChunk', colChunk);
+            // for every chunk of 3 rows
             let tempBox = [];
-            for (let box = 0; box < 9; box += 3) {
-                for (let row = 0; row < 3; row++) {
-                    tempBox.push(m[row + box][col]);
+            for (let rowChunk = 0; rowChunk < 9; rowChunk += 3) {
+                console.log('rowChunk', rowChunk);
+                // for every row of the chunk
+                for (let chunkRow = 0; chunkRow < 3; chunkRow ++) {
+                    console.log('chunkRow', chunkRow, 'push', m[colChunk][rowChunk + chunkRow]);
+                    tempBox.push(m[colChunk][rowChunk + chunkRow]);
                 }
-                boxes.push(tempBox);
             }
+            boxes.push(tempBox);
         }
+        console.log('boxes', boxes);
         return boxes;
     }
 
