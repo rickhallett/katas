@@ -136,11 +136,18 @@ describe('TDD', () => {
 
         const boxes = exports.createBoxes(trueSudoku);
         //console.log(boxes);
+
+        for (let i = 0; i < 9; i++) {
+            assert.deepEqual(
+                exports.createBoxes()[i],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9]
+            );
+        }
     });
 });
 
 describe('Codewars Tests', () => {
-    xit('validates true suduokus', () => {
+    it('validates true suduokus', () => {
         assert.equal(
             validSolution([
                 [5, 3, 4, 6, 7, 8, 9, 1, 2],
@@ -185,79 +192,56 @@ function validSolution(sudoku, unitTest) {
         for (let i = 0; i < m.length; i++) {
             for (let j = 0; j < m[i].length; j++) {
                 if (m[i][j] === 0) return false;
+
             }
         }
+
+        return true;
     }
 
     function createRows(m = matrix) {
         for (let i = 0; i < m.length; i++) {
-            rows.push(m[i].sort());
+            rows.push(m[i].slice().sort());
         }
 
         return rows;
     }
 
-    function createCols(m = matrix) {
-        // for every chunk of 3 columns
+    function createBoxes(m = matrix) {
         for (let colChunk = 0; colChunk < 9; colChunk += 3) {
-            console.log('colChunk', colChunk);
-            // for every chunk of 3 rows
-            let tempBox = [];
             for (let rowChunk = 0; rowChunk < 9; rowChunk += 3) {
-                console.log('rowChunk', rowChunk);
-                // for every row of the chunk
-                for (let chunkRow = 0; chunkRow < 3; chunkRow ++) {
-                    console.log('chunkRow', chunkRow, 'push', m[colChunk][rowChunk + chunkRow]);
-                    tempBox.push(m[colChunk][rowChunk + chunkRow]);
+                let tempBox = [];
+                for (let chunkRow = 0; chunkRow < 3; chunkRow++) {
+                    for (let chunkRowCol = 0; chunkRowCol < 3; chunkRowCol++) {
+                        tempBox.push(m[rowChunk + chunkRow][colChunk + chunkRowCol]);
+                    }
                 }
+                
+                boxes.push(tempBox.sort());
             }
-            boxes.push(tempBox);
         }
-        console.log('boxes', boxes);
         return boxes;
     }
 
 
-    /**
-     *  col 0 (box 1)
-        row 1, 3 look ahead, forEach push to tempBox
-        row 2, 3 look ahead, ""
-        row 3, 3 look ahead, ""
-
-        tempBox push to boxes
-             
-              (box 2)
-        row n, 3 look ahead
-        ...
-
-        col 3 (box 4)
-        row 1, 3 look ahead
-        row n, 3 look ahead
-        ...
-
-        col 6 (box 7)
-        row 1, 3 look ahead
-        row n, 3 look ahead
-
-
-
-    */
-    function createBoxes(m = matrix) {
-        // 5 3 4, 6 7 2, 1 9 8
-        for (let box = 0; box < 9; box++) {
-            //console.log('box', box)
-            let tempBox = [];
-            for (let row = 0; row < 3; row++) {
-                //console.log('row', row);
-                for (let col = 0; col < 3; col++) {
-                    //console.log('col', col);
-                    tempBox.push(m[row][col]);        
-                }
+    function createCols(m = matrix) {
+        for (let col = 0; col < 9; col++) {
+            let tempCol = [];
+            for (let row = 0; row < 9; row++) {
+               tempCol.push(m[row][col]); 
             }
-            boxes.push(tempBox);
+            cols.push(tempCol.sort());
         }
 
-        return boxes;
+        return cols;
+    }
+
+    function arrayEquals(actual, expected) {
+        for (let i = 0; i < actual.length; i++) {
+            if (actual[i] !== expected[i]) return false;
+        }
+
+        return true;
     }
 
     function validateMatrix() {}
@@ -273,8 +257,31 @@ function validSolution(sudoku, unitTest) {
         };
     }
 
+    const sortedArray = [1,2,3,4,5,6,7,8,9];
+
     if (!checkForEmptyCells()) {
         return false;
+    }
+
+    createRows();
+    for (let row = 0; row < 9; row++) {
+       if (!arrayEquals(rows[row], sortedArray)) {
+           return false;
+       }
+    }
+
+    createCols();
+    for (let col = 0; col < 9; col++) {
+        if (!arrayEquals(cols[col], sortedArray)) {
+            return false;
+        }
+    }
+
+    createBoxes();
+    for (let box = 0; box < 9; box++) {
+        if (!arrayEquals(boxes[box], sortedArray)) {
+            return false;
+        }
     }
 
     return true;
