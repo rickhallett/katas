@@ -88,7 +88,6 @@ describe('TDD', () => {
             createRows: exports.createRows,
             createCols: exports.createCols,
             createBoxes: exports.createBoxes,
-            validateMatrix: exports.validateMatrix,
         };
 
         assert.deepEqual(exports, internalFunctions);
@@ -244,8 +243,6 @@ function validSolution(sudoku, unitTest) {
         return true;
     }
 
-    function validateMatrix() {}
-
     if (unitTest) {
         return {
             matrix,
@@ -253,7 +250,6 @@ function validSolution(sudoku, unitTest) {
             createRows,
             createCols,
             createBoxes,
-            validateMatrix,
         };
     }
 
