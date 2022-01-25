@@ -177,6 +177,43 @@ describe('Codewars Tests', () => {
             false
         );
     });
+    
+    it('passes the submission code wars test', () => {
+        /**
+         Expected 'false' on input of 
+         
+         <pre>
+
+            1 2 3 4 5 6 7 8 9
+            2 3 1 5 6 4 8 9 7
+            3 1 2 6 4 5 9 7 8
+            4 5 6 7 8 9 1 2 3
+            5 6 4 8 9 7 2 3 1
+            6 4 5 9 7 8 3 1 2
+            7 8 9 1 2 3 4 5 6
+            8 9 7 2 3 1 5 6 4
+            9 7 8 3 1 2 6 4 5
+            
+        </pre>
+            
+            : expected true to equal false
+
+         */
+        assert.equal(
+            validSolution([
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [2, 3, 1, 5, 6, 4, 8, 9, 7],
+                [3, 1, 2, 6, 4, 5, 9, 7, 8],
+                [4, 5, 6, 7, 8, 9, 1, 2, 3],
+                [5, 6, 4, 8, 9, 7, 2, 3, 1],
+                [6, 4, 5, 9, 7, 8, 3, 1, 2],
+                [7, 8, 9, 1, 2, 3, 4, 5, 6],
+                [8, 9, 7, 2, 3, 1, 5, 6, 4],
+                [9, 7, 8, 3, 1, 2, 6, 4, 5],
+            ]),
+            false
+        )
+    })
 });
 
 // Implementation
@@ -235,10 +272,40 @@ function validSolution(sudoku, unitTest) {
         return cols;
     }
 
-    function arrayEquals(actual, expected) {
+    function isEqual(actual, expected) {
+        console.log('isEqual', actual, expected);
         for (let i = 0; i < actual.length; i++) {
+            console.log('not equal!')
             if (actual[i] !== expected[i]) return false;
         }
+
+
+        return true;
+    }
+
+    function isValid(data) {
+        const sortedArray = [1,2,3,4,5,6,7,8,9];
+
+        for (let i = 0; i < 9; i++) {
+            if (!isEqual(data[i], sortedArray)) {
+                return false;
+            }
+        }
+    }
+
+    function runSolution() {
+        if (!checkForEmptyCells()) {
+            return false;
+        }
+
+        createRows();
+        if (!isValid(rows)) return false;
+
+        createCols();
+        if (!isValid(cols)) return false;
+        
+        createBoxes();
+        if (!isValid(boxes)) return false;
 
         return true;
     }
@@ -253,34 +320,7 @@ function validSolution(sudoku, unitTest) {
         };
     }
 
-    const sortedArray = [1,2,3,4,5,6,7,8,9];
-
-    if (!checkForEmptyCells()) {
-        return false;
-    }
-
-    createRows();
-    for (let row = 0; row < 9; row++) {
-       if (!arrayEquals(rows[row], sortedArray)) {
-           return false;
-       }
-    }
-
-    createCols();
-    for (let col = 0; col < 9; col++) {
-        if (!arrayEquals(cols[col], sortedArray)) {
-            return false;
-        }
-    }
-
-    createBoxes();
-    for (let box = 0; box < 9; box++) {
-        if (!arrayEquals(boxes[box], sortedArray)) {
-            return false;
-        }
-    }
-
-    return true;
+    return runSolution();
 }
 
 // Alt
