@@ -45,282 +45,334 @@ validSolution([
 
  */
 
-const chai = require('chai');
-const assert = chai.assert;
-chai.config.truncateThreshold = 0;
+// const chai = require('chai');
+// const assert = chai.assert;
+// chai.config.truncateThreshold = 0;
 
-describe('TDD', () => {
-    let trueSudoku;
-    let falseSudoku;
+// describe('TDD', () => {
+//     let trueSudoku;
+//     let falseSudoku;
 
-    beforeEach(() => {
-        trueSudoku = [
-            [5, 3, 4, 6, 7, 8, 9, 1, 2],
-            [6, 7, 2, 1, 9, 5, 3, 4, 8],
-            [1, 9, 8, 3, 4, 2, 5, 6, 7],
-            [8, 5, 9, 7, 6, 1, 4, 2, 3],
-            [4, 2, 6, 8, 5, 3, 7, 9, 1],
-            [7, 1, 3, 9, 2, 4, 8, 5, 6],
-            [9, 6, 1, 5, 3, 7, 2, 8, 4],
-            [2, 8, 7, 4, 1, 9, 6, 3, 5],
-            [3, 4, 5, 2, 8, 6, 1, 7, 9],
-        ];
+//     beforeEach(() => {
+//         trueSudoku = [
+//             [5, 3, 4, 6, 7, 8, 9, 1, 2],
+//             [6, 7, 2, 1, 9, 5, 3, 4, 8],
+//             [1, 9, 8, 3, 4, 2, 5, 6, 7],
+//             [8, 5, 9, 7, 6, 1, 4, 2, 3],
+//             [4, 2, 6, 8, 5, 3, 7, 9, 1],
+//             [7, 1, 3, 9, 2, 4, 8, 5, 6],
+//             [9, 6, 1, 5, 3, 7, 2, 8, 4],
+//             [2, 8, 7, 4, 1, 9, 6, 3, 5],
+//             [3, 4, 5, 2, 8, 6, 1, 7, 9],
+//         ];
 
-        falseSudoku = [
-            [5, 3, 4, 6, 7, 8, 9, 1, 2],
-            [6, 7, 2, 1, 9, 0, 3, 4, 8],
-            [1, 0, 0, 3, 4, 2, 5, 6, 0],
-            [8, 5, 9, 7, 6, 1, 0, 2, 0],
-            [4, 2, 6, 8, 5, 3, 7, 9, 1],
-            [7, 1, 3, 9, 2, 4, 8, 5, 6],
-            [9, 0, 1, 5, 3, 7, 2, 1, 4],
-            [2, 8, 7, 4, 1, 9, 6, 3, 5],
-            [3, 0, 0, 4, 8, 1, 1, 7, 9],
-        ];
-    });
+//         falseSudoku = [
+//             [5, 3, 4, 6, 7, 8, 9, 1, 2],
+//             [6, 7, 2, 1, 9, 0, 3, 4, 8],
+//             [1, 0, 0, 3, 4, 2, 5, 6, 0],
+//             [8, 5, 9, 7, 6, 1, 0, 2, 0],
+//             [4, 2, 6, 8, 5, 3, 7, 9, 1],
+//             [7, 1, 3, 9, 2, 4, 8, 5, 6],
+//             [9, 0, 1, 5, 3, 7, 2, 1, 4],
+//             [2, 8, 7, 4, 1, 9, 6, 3, 5],
+//             [3, 0, 0, 4, 8, 1, 1, 7, 9],
+//         ];
+//     });
 
-    it('is a function that exports internal functions for unit testing', () => {
-        const exports = validSolution(trueSudoku, (unitTest = true));
+//     it('is a function that exports internal functions for unit testing', () => {
+//         const exports = validSolution(trueSudoku, (unitTest = true));
 
-        const internalFunctions = {
-            matrix: trueSudoku,
-            checkForEmptyCells: exports.checkForEmptyCells,
-            createRows: exports.createRows,
-            createCols: exports.createCols,
-            createBoxes: exports.createBoxes,
-        };
+//         const internalFunctions = {
+//             matrix: trueSudoku,
+//             checkForEmptyCells: exports.checkForEmptyCells,
+//             createRows: exports.createRows,
+//             createCols: exports.createCols,
+//             createBoxes: exports.createBoxes,
+//         };
 
-        assert.deepEqual(exports, internalFunctions);
-    });
+//         assert.deepEqual(exports, internalFunctions);
+//     });
 
-    it('does not mutate the passed in array', () => {
-        const exports = validSolution(trueSudoku, (unitTest = true));
+//     it('does not mutate the passed in array', () => {
+//         const exports = validSolution(trueSudoku, (unitTest = true));
 
-        assert.deepEqual(exports.matrix, trueSudoku);
-        assert.notEqual(exports.matrix, trueSudoku);
-    });
+//         assert.deepEqual(exports.matrix, trueSudoku);
+//         assert.notEqual(exports.matrix, trueSudoku);
+//     });
 
-    it('will throw an internal error on discovering an empty cell and exit futher computation', () => {
-        assert.equal(validSolution(falseSudoku), false);
-        const exports = validSolution(falseSudoku, (unitTest = true));
+//     it('will throw an internal error on discovering an empty cell and exit futher computation', () => {
+//         assert.equal(validSolution(falseSudoku), false);
+//         const exports = validSolution(falseSudoku, (unitTest = true));
 
-        assert.equal(exports.checkForEmptyCells(falseSudoku.slice()), false);
-    });
+//         assert.equal(exports.checkForEmptyCells(falseSudoku.slice()), false);
+//     });
 
-    it('can create and validate sorted rows', () => {
-        const exports = validSolution(trueSudoku, (unitTest = true));
-        for (let i = 0; i < 9; i++) {
-            assert.deepEqual(
-                exports.createRows()[i],
-                [1, 2, 3, 4, 5, 6, 7, 8, 9]
-            );
-        }
-    });
+//     it('can create and validate sorted rows', () => {
+//         const exports = validSolution(trueSudoku, (unitTest = true));
+//         for (let i = 0; i < 9; i++) {
+//             assert.deepEqual(
+//                 exports.createRows()[i],
+//                 [1, 2, 3, 4, 5, 6, 7, 8, 9]
+//             );
+//         }
+//     });
 
-    it('can create and validate sorted columns', () => {
-        const exports = validSolution(trueSudoku, (unitTest = true));
+//     it('can create and validate sorted columns', () => {
+//         const exports = validSolution(trueSudoku, (unitTest = true));
 
-        //const cols = exports.createCols(trueSudoku.slice());
+//         //const cols = exports.createCols(trueSudoku.slice());
 
-        for (let i = 0; i < 9; i++) {
-            assert.deepEqual(
-                exports.createCols()[i],
-                [1, 2, 3, 4, 5, 6, 7, 8, 9]
-            );
-        }
-    });
+//         for (let i = 0; i < 9; i++) {
+//             assert.deepEqual(
+//                 exports.createCols()[i],
+//                 [1, 2, 3, 4, 5, 6, 7, 8, 9]
+//             );
+//         }
+//     });
 
-    it('can create and validate boxes', () => {
-        const exports = validSolution(trueSudoku, unitTest = true);
+//     it('can create and validate boxes', () => {
+//         const exports = validSolution(trueSudoku, (unitTest = true));
 
-        const boxes = exports.createBoxes(trueSudoku);
-        //console.log(boxes);
+//         const boxes = exports.createBoxes(trueSudoku);
+//         //console.log(boxes);
 
-        for (let i = 0; i < 9; i++) {
-            assert.deepEqual(
-                exports.createBoxes()[i],
-                [1, 2, 3, 4, 5, 6, 7, 8, 9]
-            );
-        }
-    });
-});
+//         for (let i = 0; i < 9; i++) {
+//             assert.deepEqual(
+//                 exports.createBoxes()[i],
+//                 [1, 2, 3, 4, 5, 6, 7, 8, 9]
+//             );
+//         }
+//     });
+// });
 
-describe('Codewars Tests', () => {
-    it('validates true suduokus', () => {
-        assert.equal(
-            validSolution([
-                [5, 3, 4, 6, 7, 8, 9, 1, 2],
-                [6, 7, 2, 1, 9, 5, 3, 4, 8],
-                [1, 9, 8, 3, 4, 2, 5, 6, 7],
-                [8, 5, 9, 7, 6, 1, 4, 2, 3],
-                [4, 2, 6, 8, 5, 3, 7, 9, 1],
-                [7, 1, 3, 9, 2, 4, 8, 5, 6],
-                [9, 6, 1, 5, 3, 7, 2, 8, 4],
-                [2, 8, 7, 4, 1, 9, 6, 3, 5],
-                [3, 4, 5, 2, 8, 6, 1, 7, 9],
-            ]),
-            true
-        );
+// describe('Codewars Tests', () => {
+//     it('validates true suduokus', () => {
+//         assert.equal(
+//             validSolution([
+//                 [5, 3, 4, 6, 7, 8, 9, 1, 2],
+//                 [6, 7, 2, 1, 9, 5, 3, 4, 8],
+//                 [1, 9, 8, 3, 4, 2, 5, 6, 7],
+//                 [8, 5, 9, 7, 6, 1, 4, 2, 3],
+//                 [4, 2, 6, 8, 5, 3, 7, 9, 1],
+//                 [7, 1, 3, 9, 2, 4, 8, 5, 6],
+//                 [9, 6, 1, 5, 3, 7, 2, 8, 4],
+//                 [2, 8, 7, 4, 1, 9, 6, 3, 5],
+//                 [3, 4, 5, 2, 8, 6, 1, 7, 9],
+//             ]),
+//             true
+//         );
 
-        assert.equal(
-            validSolution([
-                [5, 3, 4, 6, 7, 8, 9, 1, 2],
-                [6, 7, 2, 1, 9, 0, 3, 4, 8],
-                [1, 0, 0, 3, 4, 2, 5, 6, 0],
-                [8, 5, 9, 7, 6, 1, 0, 2, 0],
-                [4, 2, 6, 8, 5, 3, 7, 9, 1],
-                [7, 1, 3, 9, 2, 4, 8, 5, 6],
-                [9, 0, 1, 5, 3, 7, 2, 1, 4],
-                [2, 8, 7, 4, 1, 9, 6, 3, 5],
-                [3, 0, 0, 4, 8, 1, 1, 7, 9],
-            ]),
-            false
-        );
-    });
-    
-    it('passes the submission code wars test', () => {
-        /**
-         Expected 'false' on input of 
+//         assert.equal(
+//             validSolution([
+//                 [5, 3, 4, 6, 7, 8, 9, 1, 2],
+//                 [6, 7, 2, 1, 9, 0, 3, 4, 8],
+//                 [1, 0, 0, 3, 4, 2, 5, 6, 0],
+//                 [8, 5, 9, 7, 6, 1, 0, 2, 0],
+//                 [4, 2, 6, 8, 5, 3, 7, 9, 1],
+//                 [7, 1, 3, 9, 2, 4, 8, 5, 6],
+//                 [9, 0, 1, 5, 3, 7, 2, 1, 4],
+//                 [2, 8, 7, 4, 1, 9, 6, 3, 5],
+//                 [3, 0, 0, 4, 8, 1, 1, 7, 9],
+//             ]),
+//             false
+//         );
+//     });
+
+//     it('passes the submission code wars test', () => {
+//         /**
+//          Expected 'false' on input of 
          
-         <pre>
+//          <pre>
 
-            1 2 3 4 5 6 7 8 9
-            2 3 1 5 6 4 8 9 7
-            3 1 2 6 4 5 9 7 8
-            4 5 6 7 8 9 1 2 3
-            5 6 4 8 9 7 2 3 1
-            6 4 5 9 7 8 3 1 2
-            7 8 9 1 2 3 4 5 6
-            8 9 7 2 3 1 5 6 4
-            9 7 8 3 1 2 6 4 5
+//             1 2 3 4 5 6 7 8 9
+//             2 3 1 5 6 4 8 9 7
+//             3 1 2 6 4 5 9 7 8
+//             4 5 6 7 8 9 1 2 3
+//             5 6 4 8 9 7 2 3 1
+//             6 4 5 9 7 8 3 1 2
+//             7 8 9 1 2 3 4 5 6
+//             8 9 7 2 3 1 5 6 4
+//             9 7 8 3 1 2 6 4 5
             
-        </pre>
+//         </pre>
             
-            : expected true to equal false
+//             : expected true to equal false
 
-         */
-        assert.equal(
-            validSolution([
-                [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                [2, 3, 1, 5, 6, 4, 8, 9, 7],
-                [3, 1, 2, 6, 4, 5, 9, 7, 8],
-                [4, 5, 6, 7, 8, 9, 1, 2, 3],
-                [5, 6, 4, 8, 9, 7, 2, 3, 1],
-                [6, 4, 5, 9, 7, 8, 3, 1, 2],
-                [7, 8, 9, 1, 2, 3, 4, 5, 6],
-                [8, 9, 7, 2, 3, 1, 5, 6, 4],
-                [9, 7, 8, 3, 1, 2, 6, 4, 5],
-            ]),
-            false
-        )
-    })
-});
+//          */
+//         assert.equal(
+//             validSolution([
+//                 [1, 2, 3, 4, 5, 6, 7, 8, 9],
+//                 [2, 3, 1, 5, 6, 4, 8, 9, 7],
+//                 [3, 1, 2, 6, 4, 5, 9, 7, 8],
+//                 [4, 5, 6, 7, 8, 9, 1, 2, 3],
+//                 [5, 6, 4, 8, 9, 7, 2, 3, 1],
+//                 [6, 4, 5, 9, 7, 8, 3, 1, 2],
+//                 [7, 8, 9, 1, 2, 3, 4, 5, 6],
+//                 [8, 9, 7, 2, 3, 1, 5, 6, 4],
+//                 [9, 7, 8, 3, 1, 2, 6, 4, 5],
+//             ]),
+//             false
+//         );
+//     });
+// });
 
-// Implementation
+// // Implementation
 
-function validSolution(sudoku, unitTest) {
-    let matrix = sudoku.slice();
-    let rows = [];
-    let cols = [];
-    let boxes = [];
+// function validSolution(sudoku, unitTest) {
+//     let matrix = sudoku.slice();
+//     let rows = [];
+//     let cols = [];
+//     let boxes = [];
 
-    function checkForEmptyCells(m = matrix) {
-        for (let i = 0; i < m.length; i++) {
-            for (let j = 0; j < m[i].length; j++) {
-                if (m[i][j] === 0) return false;
+//     function checkForEmptyCells(m = matrix) {
+//         for (let i = 0; i < m.length; i++) {
+//             for (let j = 0; j < m[i].length; j++) {
+//                 if (m[i][j] === 0) return false;
+//             }
+//         }
 
-            }
-        }
+//         return true;
+//     }
 
-        return true;
-    }
+//     function createRows(m = matrix) {
+//         for (let i = 0; i < m.length; i++) {
+//             rows.push(m[i].slice().sort());
+//         }
 
-    function createRows(m = matrix) {
-        for (let i = 0; i < m.length; i++) {
-            rows.push(m[i].slice().sort());
-        }
+//         return rows;
+//     }
 
-        return rows;
-    }
+//     function createBoxes(m = matrix) {
+//         for (let colChunk = 0; colChunk < 9; colChunk += 3) {
+//             for (let rowChunk = 0; rowChunk < 9; rowChunk += 3) {
+//                 let tempBox = [];
+//                 for (let chunkRow = 0; chunkRow < 3; chunkRow++) {
+//                     for (let chunkRowCol = 0; chunkRowCol < 3; chunkRowCol++) {
+//                         tempBox.push(
+//                             m[rowChunk + chunkRow][colChunk + chunkRowCol]
+//                         );
+//                     }
+//                 }
 
-    function createBoxes(m = matrix) {
-        for (let colChunk = 0; colChunk < 9; colChunk += 3) {
-            for (let rowChunk = 0; rowChunk < 9; rowChunk += 3) {
-                let tempBox = [];
-                for (let chunkRow = 0; chunkRow < 3; chunkRow++) {
-                    for (let chunkRowCol = 0; chunkRowCol < 3; chunkRowCol++) {
-                        tempBox.push(m[rowChunk + chunkRow][colChunk + chunkRowCol]);
-                    }
-                }
-                
-                boxes.push(tempBox.sort());
-            }
-        }
-        return boxes;
-    }
+//                 boxes.push(tempBox.sort());
+//             }
+//         }
+//         return boxes;
+//     }
 
+//     function createCols(m = matrix) {
+//         for (let col = 0; col < 9; col++) {
+//             let tempCol = [];
+//             for (let row = 0; row < 9; row++) {
+//                 tempCol.push(m[row][col]);
+//             }
+//             cols.push(tempCol.sort());
+//         }
 
-    function createCols(m = matrix) {
-        for (let col = 0; col < 9; col++) {
-            let tempCol = [];
-            for (let row = 0; row < 9; row++) {
-               tempCol.push(m[row][col]); 
-            }
-            cols.push(tempCol.sort());
-        }
+//         return cols;
+//     }
 
-        return cols;
-    }
+//     function isEqual(actual, expected) {
+//         console.log('isEqual', actual, expected);
+//         for (let i = 0; i < actual.length; i++) {
+//             if (actual[i] !== expected[i]) {
+//                 // console.log('not equal!')
+//                 return false;
+//             }
+//         }
 
-    function isEqual(actual, expected) {
-        console.log('isEqual', actual, expected);
-        for (let i = 0; i < actual.length; i++) {
-            console.log('not equal!')
-            if (actual[i] !== expected[i]) return false;
-        }
+//         return true;
+//     }
 
+//     function isValid(data) {
+//         const sortedArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-        return true;
-    }
+//         for (let i = 0; i < 9; i++) {
+//             if (!isEqual(data[i], sortedArray)) {
+//                 return false;
+//             }
+//         }
 
-    function isValid(data) {
-        const sortedArray = [1,2,3,4,5,6,7,8,9];
+//         return true;
+//     }
 
-        for (let i = 0; i < 9; i++) {
-            if (!isEqual(data[i], sortedArray)) {
-                return false;
-            }
-        }
-    }
+//     function runSolution() {
+//         if (!checkForEmptyCells()) {
+//             return false;
+//         }
 
-    function runSolution() {
-        if (!checkForEmptyCells()) {
-            return false;
-        }
+//         createRows();
+//         if (!isValid(rows)) {
+//             console.log('rows invalid');
+//             return false;
+//         }
 
-        createRows();
-        if (!isValid(rows)) return false;
+//         createCols();
+//         if (!isValid(cols)) {
+//             console.log('cols invalid');
+//             return false;
+//         }
 
-        createCols();
-        if (!isValid(cols)) return false;
-        
-        createBoxes();
-        if (!isValid(boxes)) return false;
+//         createBoxes();
+//         if (!isValid(boxes)) {
+//             console.log('boxes invalid');
+//             return false;
+//         }
 
-        return true;
-    }
+//         return true;
+//     }
 
-    if (unitTest) {
-        return {
-            matrix,
-            checkForEmptyCells,
-            createRows,
-            createCols,
-            createBoxes,
-        };
-    }
+//     if (unitTest) {
+//         return {
+//             matrix,
+//             checkForEmptyCells,
+//             createRows,
+//             createCols,
+//             createBoxes,
+//         };
+//     }
 
-    return runSolution();
-}
+//     return runSolution();
+// }
 
 // Alt
+const sudo = [
+    [5, 3, 4, 6, 7, 8, 9, 1, 2],
+    [6, 7, 2, 1, 9, 5, 3, 4, 8],
+    [1, 9, 8, 3, 4, 2, 5, 6, 7],
+    [8, 5, 9, 7, 6, 1, 4, 2, 3],
+    [4, 2, 6, 8, 5, 3, 7, 9, 1],
+    [7, 1, 3, 9, 2, 4, 8, 5, 6],
+    [9, 6, 1, 5, 3, 7, 2, 8, 4],
+    [2, 8, 7, 4, 1, 9, 6, 3, 5],
+    [3, 4, 5, 2, 8, 6, 1, 7, 9],
+];
+
+function validSolutionAlt(board) {
+    var validSet = (s) => s.size == 9 && !s.has(0);
+    var rowSet = (i) => board[i].reduce((s, v) => s.add(v), new Set());
+    var columnSet = (i) => board.reduce((s, v) => s.add(v[i]), new Set());
+    var boxSet = ([r, c]) => {
+        const a = board.slice(r, r + 3)
+        const b = a.reduce(
+                (s, v) => v.slice(c, c + 3).reduce((s, v) => s.add(v), s),
+                new Set()
+            );
+        console.log('slice', a)
+        console.log('reduced', b)
+        return b;
+    }
+    var boxCorner = (i) => [Math.floor(i / 3) * 3, (i % 3) * 3];
+
+    for (var i = 0; i < 9; i++)
+        if (
+            !validSet(rowSet(i)) ||
+            !validSet(columnSet(i)) ||
+            !validSet(boxSet(boxCorner(i)))
+        )
+            return false;
+
+    return true;
+}
+
+    console.log(validSolutionAlt(sudo))
